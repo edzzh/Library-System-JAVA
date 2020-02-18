@@ -1,7 +1,7 @@
 import java.security.MessageDigest;
 
 public class Utils {
-	// Use MD5 hash algorithm to hash the given password
+    // Use MD5 hash algorithm to hash the given password
     // MD5 is one way description, no way to decrypt it
     // Reference Link: https://stackoverflow.com/a/6565597
     public static String MD5(String md5) {
