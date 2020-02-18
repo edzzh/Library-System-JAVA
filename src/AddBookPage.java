@@ -95,10 +95,11 @@ public class AddBookPage extends JFrame implements ActionListener{
 					rarity.getText()
 			);
 			
-			System.out.println("Book is added in database");
+			MainPage.reloadTable();
 		} catch (NumberFormatException | SQLException e1) {
 			e1.printStackTrace();
 		}
+		
 		this.dispose();
 	}
 

@@ -1,5 +1,5 @@
 import java.sql.*;
-import java.util.Random;
+import java.util.*;
 
 public class Database {
 	final private static String userDatabase = "jdbc:sqlite:library_users.db";
@@ -15,7 +15,6 @@ public class Database {
             System.out.println(e.getMessage());
         } finally {
             try {
-                // If connection is not equal to null, close the connection
                 if (con != null) {
                     con.close();
                 }
@@ -25,7 +24,6 @@ public class Database {
         }
     }
     
-    // Create User data table
     public static void createUsersTable() {
         String sql = "CREATE TABLE IF NOT EXISTS USERS (\n"
                 + "ID integer PRIMARY KEY,\n"
@@ -133,13 +131,46 @@ public class Database {
         
         ps.executeUpdate();
     }
+    
+    public static String[][] getBooks() throws SQLException {
+    	String query = "SELECT * FROM BOOKS ORDER BY ID ASC";
+    	String [][] Content;
+    	int bookRowCount = 0;
+    	int rowNum = 0;
+    	
+    	con = DriverManager.getConnection(bookDatabase);
+    	Statement stmt = con.createStatement();
+    	
+    	// Get Row Count By Using TYPE_FORWARD_ONLY as ResultSet Type
+    	ResultSet rsBookRowCount = stmt.executeQuery("SELECT COUNT(*) AS rowcount FROM BOOKS");
+    	rsBookRowCount.next();
+    	bookRowCount = rsBookRowCount.getInt("rowcount");
+    	rsBookRowCount.close();
+    	
+    	// Get BOOKS from database
+    	ResultSet rsBooks = stmt.executeQuery(query);
+  	
+        if (bookRowCount != 0) {
+        	Content = new String[bookRowCount][7];
+        	
+        	while (rsBooks.next()) {
+        		Content[rowNum][0] = "" + rsBooks.getString("ISBN");
+        		Content[rowNum][1] = "" + rsBooks.getInt("Year");
+        		Content[rowNum][2] = "" + rsBooks.getString("Author");
+        		Content[rowNum][3] = "" + rsBooks.getString("Title");
+        		Content[rowNum][4] = "" + rsBooks.getInt("Rating");
+        		Content[rowNum][5] = "" + rsBooks.getString("Condition");
+        		Content[rowNum][6] = "" + rsBooks.getString("Rarity");
+        		rowNum++;
+        	}
+        } else {
+        	Content = new String[0][7];
+        }
+        
+        return Content;
+    }
         
     public static void main(String[] args) {
-//    	try {
-//			saveBookInDatabase("ISBN1122", 2019, "Bob", "Wot", 3, "Good", "Rare");
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+    	
     }
 }

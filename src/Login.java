@@ -25,9 +25,11 @@ public class Login extends JFrame implements ActionListener {
 	   text2 = new JPasswordField(15);
 	  
 	   SUBMIT=new JButton("SUBMIT");
+	   SUBMIT.setMnemonic(KeyEvent.VK_ENTER);
+	   
 	   REGISTER=new JButton("REGISTER");
 	   
-	   panel=new JPanel(new GridLayout(3,1));
+	   panel = new JPanel(new GridLayout(3,1));
 	   panel.add(label1);
 	   panel.add(text1);
 	   panel.add(label2);
@@ -66,7 +68,12 @@ public class Login extends JFrame implements ActionListener {
 		
 		if (user != null) {
 			this.dispose();
-			MainPage.showMainLibraryGUI(user);
+			try {
+				MainPage.showMainLibraryGUI(user);
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		} else {
 			System.out.println("enter the valid username and password");
 			JOptionPane.showMessageDialog(this, "Incorrect login or password", 
