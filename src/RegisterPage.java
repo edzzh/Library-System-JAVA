@@ -6,17 +6,17 @@ import java.sql.SQLException;
 import javax.swing.*;
 
 public class RegisterPage extends JFrame implements ActionListener{
-	private static final long serialVersionUID = -6185538457897734306L;
-	JButton register;
+    private static final long serialVersionUID = -6185538457897734306L;
+    JButton register;
     JLabel nameLabel, surnameLabel, usernameLabel, passwordLabel;
     JTextField name, surname, username;
     JPasswordField password;
     
-	RegisterPage() {
-		setTitle("REGISTER FORM");
-		setSize(500, 500);
+    RegisterPage() {
+	setTitle("REGISTER FORM");
+	setSize(500, 500);
 		
-		GridBagLayout g = new GridBagLayout();
+	GridBagLayout g = new GridBagLayout();
         GridBagConstraints c = new GridBagConstraints();
         setLayout(g);
         c.insets = new Insets(0, 0, 10, 0);
@@ -59,7 +59,7 @@ public class RegisterPage extends JFrame implements ActionListener{
         c.insets = new Insets(10, 0, 0, 0);
         add(register, c);
         register.addActionListener(this);
-	}
+    }
 
 	@SuppressWarnings("deprecation")
 	@Override
