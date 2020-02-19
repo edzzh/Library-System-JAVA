@@ -7,9 +7,9 @@ public class MainPage extends JPanel{
 	private static final long serialVersionUID = -4582810412450985776L;
 	private static User activeUser;
 	
-	public static JTable jBooksTabel;
-	public static JScrollPane jScrollPane = new JScrollPane();
 	public static JPanel panel = new JPanel();
+	public static JScrollPane jScrollPane = new JScrollPane();
+	public static JTable jBooksTable;
 	
 	public MainPage() throws SQLException {
 		super(new GridLayout(1,1));
@@ -24,8 +24,8 @@ public class MainPage extends JPanel{
 	}
 	
 	private JComponent makeLibraryPanel() throws SQLException {
-		jBooksTabel = createTable();
-		jScrollPane.getViewport().add(jBooksTabel);
+		jBooksTable = createTable();
+		jScrollPane.getViewport().add(jBooksTable);
         
         JButton addBook = new JButton("Add Book");
         addBook.setSize(40, 40);
@@ -39,7 +39,7 @@ public class MainPage extends JPanel{
         deleteBook.setSize(40, 40);
         
         deleteBook.addActionListener((e) -> {
-        	System.out.println("Book deleted");
+        	deleteBook();
         });
         
         
@@ -79,10 +79,53 @@ public class MainPage extends JPanel{
         return newTable;
 	}
 	
+	public static void deleteBook() {
+		try {
+			if (jBooksTable.getValueAt(jBooksTable.getSelectedRow(), jBooksTable.getSelectedColumn()) != null) {
+				String ObjButtons[] = {"YES", "NO"};
+				String ISBN = jBooksTable.getValueAt(jBooksTable.getSelectedRow(),0).toString();
+				
+				int PromptResult = JOptionPane.showOptionDialog(
+						null, 
+						"Are you sure you want to remove book - '" + jBooksTable.getValueAt(jBooksTable.getSelectedRow(),3) + "'?",
+						"Delete Book",
+						JOptionPane.DEFAULT_OPTION,
+						JOptionPane.ERROR_MESSAGE,
+						null,
+						ObjButtons,
+						ObjButtons[0]
+				);
+				
+				if (PromptResult == 0) {
+					try {
+						Database.deleteBook(ISBN);
+						reloadTable();
+					} catch(Exception e) {
+						JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					}
+					
+					JOptionPane.showMessageDialog(
+							null,
+							"Record has been successfully removed.",
+							"Comfirm Delete",
+							JOptionPane.INFORMATION_MESSAGE
+					);
+				}
+			}
+		} catch(Exception e) {
+			JOptionPane.showMessageDialog(
+					null,
+					"Please select a record in the list to deleted.",
+					"No Record Selected",
+					JOptionPane.INFORMATION_MESSAGE
+			);
+		}
+	}
+	
 	public static void reloadTable() throws SQLException {
-		jScrollPane.getViewport().remove(jBooksTabel);
-		jBooksTabel = createTable();
-		jScrollPane.getViewport().add(jBooksTabel);
+		jScrollPane.getViewport().remove(jBooksTable);
+		jBooksTable = createTable();
+		jScrollPane.getViewport().add(jBooksTable);
 		panel.repaint();
     }
 	
@@ -96,7 +139,7 @@ public class MainPage extends JPanel{
 		frame.add(new MainPage());
 		
 		frame.pack();
-		frame.setSize(1000, 500);
+		frame.setSize(950, 500);
 		frame.setVisible(true);
 	}
 }

@@ -169,8 +169,19 @@ public class Database {
         
         return Content;
     }
-        
-    public static void main(String[] args) {
+    
+    public static void deleteBook(String isbn) throws SQLException {
+    	String sql = "DELETE FROM BOOKS WHERE ISBN = ?";
+    	PreparedStatement pstmt = con.prepareStatement(sql);
     	
+    	pstmt.setString(1, isbn);
+    	pstmt.executeUpdate();
+    }
+    
+    // Use for DB creation on your local computer
+    public static void main(String[] args) {
+//    	connect();
+//    	createBooksTable();
+//    	createUsersTable();
     }
 }
