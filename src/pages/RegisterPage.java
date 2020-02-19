@@ -1,9 +1,12 @@
+package pages;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 import javax.swing.*;
+
+import model.Database;
 
 public class RegisterPage extends JFrame implements ActionListener{
     private static final long serialVersionUID = -6185538457897734306L;

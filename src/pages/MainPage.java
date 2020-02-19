@@ -1,5 +1,10 @@
+package pages;
 import java.awt.*;
 import javax.swing.*;
+
+import model.Database;
+import model.User;
+
 import java.awt.event.*;
 import java.sql.SQLException;
 
@@ -52,8 +57,7 @@ public class MainPage extends JPanel{
 	};
 	
 	private static JTable createTable() throws SQLException {
-		String ColumnHeaderName[] = { 
-				"ISBN", "Year", "Author", "Title", "Rating", "Condition", "Rarity" };
+		String ColumnHeaderName[] = { "ISBN", "Year", "Author", "Title", "Rating", "Condition", "Rarity" };
 		
 		String[][] books = Database.getBooks();
 		

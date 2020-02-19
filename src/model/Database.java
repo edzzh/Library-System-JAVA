@@ -1,5 +1,9 @@
+package model;
+
 import java.sql.*;
 import java.util.*;
+import model.User;
+import utils.Utils;
 
 public class Database {
 	final private static String userDatabase = "jdbc:sqlite:library_users.db";

@@ -1,11 +1,13 @@
+package pages;
 
+import model.*;
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 
-public class Login extends JFrame implements ActionListener {
+public class LoginPage extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	JButton SUBMIT, REGISTER;
 	JPanel panel;
@@ -13,7 +15,7 @@ public class Login extends JFrame implements ActionListener {
 	final JTextField text1, text2;
 	User user;
 	
-	Login() {
+	LoginPage() {
 	   setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	   
 	   label1 = new JLabel();
@@ -71,11 +73,9 @@ public class Login extends JFrame implements ActionListener {
 			try {
 				MainPage.showMainLibraryGUI(user);
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		} else {
-			System.out.println("enter the valid username and password");
 			JOptionPane.showMessageDialog(this, "Incorrect login or password", 
 					"Error", JOptionPane.ERROR_MESSAGE);
 		}
@@ -83,7 +83,7 @@ public class Login extends JFrame implements ActionListener {
 	
 	public static void main(String[] args) {
 		try {
-		  Login frame=new Login();
+		  LoginPage frame=new LoginPage();
 		  frame.setSize(400,100);
 		  frame.setVisible(true);
 		} catch (Exception e) {
