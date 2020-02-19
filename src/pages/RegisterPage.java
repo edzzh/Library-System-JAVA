@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 import javax.swing.*;
 
-import model.Database;
+import models.Database;
 
 public class RegisterPage extends JFrame implements ActionListener{
     private static final long serialVersionUID = -6185538457897734306L;

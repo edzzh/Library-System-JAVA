@@ -1,8 +1,8 @@
-package model;
+package models;
 
 import java.sql.*;
 import java.util.*;
-import model.User;
+import models.User;
 import utils.Utils;
 
 public class Database {

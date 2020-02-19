@@ -1,6 +1,6 @@
 package pages;
 
-import model.*;
+import models.*;
 import javax.swing.*;
 
 import java.awt.*;

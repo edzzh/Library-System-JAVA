@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.awt.*;
 import javax.swing.*;
 
-import model.Database;
+import models.Database;
 
 public class AddBookPage extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 1L;

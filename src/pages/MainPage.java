@@ -2,8 +2,7 @@ package pages;
 import java.awt.*;
 import javax.swing.*;
 
-import model.Database;
-import model.User;
+import models.*;
 
 import java.awt.event.*;
 import java.sql.SQLException;
