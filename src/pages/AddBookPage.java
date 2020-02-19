@@ -107,7 +107,7 @@ public class AddBookPage extends JFrame implements ActionListener{
 					rarity.getText()
 			);
 			
-			LibraryPage.reloadTable();
+			LibraryPage.reloadLibraryBookTable();
 		} catch (NumberFormatException | SQLException e1) {
 			e1.printStackTrace();
 		}

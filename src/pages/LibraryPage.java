@@ -75,7 +75,7 @@ public class LibraryPage {
 				if (PromptResult == 0) {
 					try {
 						Database.deleteBook(ISBN);
-						reloadTable();
+						reloadLibraryBookTable();
 					} catch(Exception e) {
 						JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					}
@@ -98,7 +98,7 @@ public class LibraryPage {
 		}
 	}
 	
-	public static void reloadTable() throws SQLException {
+	public static void reloadLibraryBookTable() throws SQLException {
 		jScrollPane.getViewport().remove(jBooksTable);
 		jBooksTable = createTable();
 		jScrollPane.getViewport().add(jBooksTable);
