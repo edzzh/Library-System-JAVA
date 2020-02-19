@@ -7,8 +7,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 
+@SuppressWarnings("serial")
 public class LoginPage extends JFrame implements ActionListener {
-	private static final long serialVersionUID = 1L;
 	JButton SUBMIT, REGISTER;
 	JPanel panel;
 	JLabel label1, label2;
@@ -71,7 +71,7 @@ public class LoginPage extends JFrame implements ActionListener {
 		if (user != null) {
 			this.dispose();
 			try {
-				MainPage.showMainLibraryGUI(user);
+				new MainPage(user);
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}

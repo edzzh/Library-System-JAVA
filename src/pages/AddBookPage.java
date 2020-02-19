@@ -1,4 +1,5 @@
 package pages;
+
 import java.awt.event.*;
 import java.sql.SQLException;
 import java.awt.*;
@@ -6,13 +7,21 @@ import javax.swing.*;
 
 import models.Database;
 
+@SuppressWarnings("serial")
 public class AddBookPage extends JFrame implements ActionListener{
-	private static final long serialVersionUID = 1L;
 	JButton addBook;
+	JScrollPane jScrollPane;
+	JTable jTable;
+	JPanel jPanel;
+	
     JLabel isbnNumberLabel, yearLabel, authorLabel, titleLabel, ratingLabel, conditionLabel, rarityLabel;
     JTextField isbnNumber, year, author, title, rating, condition, rarity;
     
-    AddBookPage() {
+    AddBookPage(JPanel jPanel, JScrollPane jScrollPane, JTable jTable) {
+    	this.jScrollPane = jScrollPane;
+    	this.jTable = jTable;
+    	this.jPanel = jPanel;
+    	
     	setTitle("ADD BOOK");
 		setSize(500, 600);
 		
@@ -98,7 +107,7 @@ public class AddBookPage extends JFrame implements ActionListener{
 					rarity.getText()
 			);
 			
-			MainPage.reloadTable();
+			LibraryPage.reloadTable();
 		} catch (NumberFormatException | SQLException e1) {
 			e1.printStackTrace();
 		}
