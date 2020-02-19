@@ -69,15 +69,6 @@ public class MainPage extends JPanel{
     	
     	newTable.setPreferredScrollableViewportSize(new Dimension(900, 300));
     	newTable.setFillsViewportHeight(true);
-    	
-    	newTable.getColumnModel().getColumn(0).setMinWidth(0);
-    	newTable.getColumnModel().getColumn(0).setPreferredWidth(100);
-    	newTable.getColumnModel().getColumn(1).setPreferredWidth(100);
-    	newTable.getColumnModel().getColumn(2).setPreferredWidth(150);
-    	newTable.getColumnModel().getColumn(3).setPreferredWidth(100);
-    	newTable.getColumnModel().getColumn(4).setPreferredWidth(100);
-    	newTable.getColumnModel().getColumn(5).setPreferredWidth(100);
-    	newTable.getColumnModel().getColumn(6).setPreferredWidth(100);
         
         return newTable;
 	}

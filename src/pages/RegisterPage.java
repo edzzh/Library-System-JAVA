@@ -16,10 +16,10 @@ public class RegisterPage extends JFrame implements ActionListener{
     JPasswordField password;
     
     RegisterPage() {
-	setTitle("REGISTER FORM");
-	setSize(500, 500);
+    	setTitle("REGISTER FORM");
+    	setSize(500, 500);
 		
-	GridBagLayout g = new GridBagLayout();
+    	GridBagLayout g = new GridBagLayout();
         GridBagConstraints c = new GridBagConstraints();
         setLayout(g);
         c.insets = new Insets(0, 0, 10, 0);
