@@ -10,18 +10,12 @@ import models.Database;
 @SuppressWarnings("serial")
 public class AddBookPage extends JFrame implements ActionListener{
 	JButton addBook;
-	JScrollPane jScrollPane;
-	JTable jTable;
-	JPanel jPanel;
-	
     JLabel isbnNumberLabel, yearLabel, authorLabel, titleLabel, ratingLabel, conditionLabel, rarityLabel;
-    JTextField isbnNumber, year, author, title, rating, condition, rarity;
+    JTextField isbnNumber, year, author, title;
+    JComboBox<Integer> ratingComboBox;
+    JComboBox<String> conditionComboBox, rarityComboBox;
     
-    AddBookPage(JPanel jPanel, JScrollPane jScrollPane, JTable jTable) {
-    	this.jScrollPane = jScrollPane;
-    	this.jTable = jTable;
-    	this.jPanel = jPanel;
-    	
+    AddBookPage() {
     	setTitle("ADD BOOK");
 		setSize(500, 600);
 		
@@ -67,24 +61,27 @@ public class AddBookPage extends JFrame implements ActionListener{
         add(ratingLabel, c);
         
         c.gridy = 9;
-        rating = new JTextField(15);
-        add(rating, c);
+        Integer ratings[] = {1,2,3,4,5,6,7,8,9,10};
+        ratingComboBox = new JComboBox<Integer>(ratings);
+        add(ratingComboBox, c);
         
         c.gridy = 10;
-        conditionLabel = new JLabel("Condition");
+        conditionLabel = new JLabel("Conditions");
         add(conditionLabel, c);
         
         c.gridy = 11;
-        condition = new JTextField(15);
-        add(condition, c);
+        String conditions[] = {"Fine", "Very Good", "Good", "Fair", "Bad"};
+        conditionComboBox = new JComboBox<String>(conditions);
+        add(conditionComboBox, c);
         
         c.gridy = 12;
         rarityLabel = new JLabel("Rarity");
         add(rarityLabel, c);
         
         c.gridy = 13;
-        rarity = new JTextField(15);
-        add(rarity, c);
+        String rarities[] = {"Rare", "Special Release", "Common"};
+        rarityComboBox = new JComboBox<String>(rarities);
+        add(rarityComboBox, c);
         
         c.gridy = 14;
         addBook = new JButton("ADD BOOK");
@@ -102,9 +99,9 @@ public class AddBookPage extends JFrame implements ActionListener{
 					Integer.parseInt(year.getText()), 
 					author.getText(), 
 					title.getText(), 
-					Integer.parseInt(rating.getText()), 
-					condition.getText(), 
-					rarity.getText()
+					Integer.parseInt(ratingComboBox.getSelectedItem().toString()), 
+					conditionComboBox.getSelectedItem().toString(), 
+					rarityComboBox.getSelectedItem().toString()
 			);
 			
 			LibraryPage.reloadLibraryBookTable();

@@ -21,7 +21,7 @@ public class LibraryPage {
 		
 		addBookButton.setSize(40, 40);
 		addBookButton.addActionListener((e) -> {
-        	AddBookPage addBookPage = new AddBookPage(jPanel, jScrollPane, jBooksTable);
+        	AddBookPage addBookPage = new AddBookPage();
         	addBookPage.setVisible(true);
         });
 		

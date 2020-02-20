@@ -12,7 +12,7 @@ public class LoginPage extends JFrame implements ActionListener {
 	JButton SUBMIT, REGISTER;
 	JPanel panel;
 	JLabel label1, label2;
-	final JTextField text1, text2;
+	JTextField text1, text2;
 	User user;
 	
 	LoginPage() {
