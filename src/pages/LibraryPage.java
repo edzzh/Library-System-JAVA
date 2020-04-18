@@ -37,7 +37,7 @@ public class LibraryPage {
         
         jPanel.add(welcomeLabel);
         
-        jBooksTable = createTable();
+        jBooksTable = createBooksTable();
         jBookScrollPane.getViewport().add(jBooksTable);
         jPanel.add(jBookScrollPane);
         
@@ -50,21 +50,21 @@ public class LibraryPage {
         return jPanel;
 	}
 	
-	public static JTable createTable() throws SQLException {
+	public static JTable createBooksTable() throws SQLException {
 		String ColumnHeaderName[] = { "ISBN", "Year", "Author", "Title", "Rating", "Condition", "Rarity", "Availability" };
 		
 		String[][] books = Database.getBooks();
 		
-		JTable newTable = new JTable(books, ColumnHeaderName) {
+		JTable booksTable = new JTable(books, ColumnHeaderName) {
     		public boolean isCellEditable (int iRows, int iCols) {
     			return false;
     		}
     	};
     	
-    	newTable.setPreferredScrollableViewportSize(new Dimension(900, 200));
-    	newTable.setFillsViewportHeight(true);
+    	booksTable.setPreferredScrollableViewportSize(new Dimension(900, 200));
+    	booksTable.setFillsViewportHeight(true);
         
-        return newTable;
+        return booksTable;
 	}
 	
 	private void deleteBook(User user) {
@@ -144,7 +144,7 @@ public class LibraryPage {
 	
 	public static void reloadLibraryBookTable() throws SQLException {
 		jBookScrollPane.getViewport().remove(jBooksTable);
-		jBooksTable = createTable();
+		jBooksTable = createBooksTable();
 		jBookScrollPane.getViewport().add(jBooksTable);
 		jPanel.repaint();
     }

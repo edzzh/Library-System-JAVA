@@ -10,10 +10,10 @@ import models.User;
 
 @SuppressWarnings("serial")
 public class RegisterPage extends JFrame implements ActionListener{
-    JButton register;
+    JButton REGISTER;
     JLabel nameLabel, surnameLabel, usernameLabel, passwordLabel;
-    JTextField name, surname, username;
-    JPasswordField password;
+    JTextField nameTextField, surnameTextField, usernameTextField;
+    JPasswordField passwordField;
     
     RegisterPage() {
     	setTitle("REGISTER FORM");
@@ -29,39 +29,39 @@ public class RegisterPage extends JFrame implements ActionListener{
         add(nameLabel, c);
         
         c.gridy = 1;
-        name = new JTextField(15);
-        add(name, c);
+        nameTextField = new JTextField(15);
+        add(nameTextField, c);
         
         c.gridy = 2;
         surnameLabel = new JLabel("Surname *");
         add(surnameLabel, c);
         
         c.gridy = 3;
-        surname = new JTextField(15);
-        add(surname, c);
+        surnameTextField = new JTextField(15);
+        add(surnameTextField, c);
         
         c.gridy = 4;
         usernameLabel = new JLabel("Username *");
         add(usernameLabel, c);
         
         c.gridy = 5;
-        username = new JTextField(15);
-        add(username, c);
+        usernameTextField = new JTextField(15);
+        add(usernameTextField, c);
         
         c.gridy = 6;
         passwordLabel = new JLabel("Password *");
         add(passwordLabel, c);
         
         c.gridy = 7;
-        password = new JPasswordField(15);
-        add(password, c);
+        passwordField = new JPasswordField(15);
+        add(passwordField, c);
         
         c.gridy = 8;
-        register = new JButton("REGISTER");
+        REGISTER = new JButton("REGISTER");
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(10, 0, 0, 0);
-        add(register, c);
-        register.addActionListener(this);
+        add(REGISTER, c);
+        REGISTER.addActionListener(this);
     }
 
 	@SuppressWarnings("deprecation")
@@ -69,10 +69,10 @@ public class RegisterPage extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		try {
 			User user = new User(
-				name.getText(), 
-				surname.getText(), 
-				username.getText(),
-				password.getText()
+				nameTextField.getText(), 
+				surnameTextField.getText(), 
+				usernameTextField.getText(),
+				passwordField.getText()
 			);
 			
 			Database.registerUserInDatabase(

@@ -83,7 +83,8 @@ public class Database {
         }
     }
     
-    public static void registerUserInDatabase(String name, String surname, String username, String password, int userCode) throws SQLException {
+    public static void registerUserInDatabase(
+    		String name, String surname, String username, String password, int userCode) throws SQLException {
         String sql = "INSERT INTO USERS(NAME, SURNAME, USERNAME, PASSWORD, USER_NUMBER) "
                 + "VALUES (?, ?, ?, ?, ?)";
         
@@ -157,10 +158,12 @@ public class Database {
     
     private static String getBookAvailablity(String ISBN) throws SQLException {
     	String query = "SELECT * FROM TAKEN_BOOKS ORDER BY ID ASC";
+    	String taken = "Available";
+    	
     	con = DriverManager.getConnection(takenBookDatabase);
     	Statement stmt = con.createStatement();
+    	
     	ResultSet rsBooks = stmt.executeQuery(query);
-    	String taken = "Available";
     	
     	while(rsBooks.next()) {
     		if (rsBooks.getString("ISBN").equals(ISBN)) {

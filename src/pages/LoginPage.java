@@ -10,39 +10,38 @@ import java.sql.*;
 @SuppressWarnings("serial")
 public class LoginPage extends JFrame implements ActionListener {
 	JButton SUBMIT, REGISTER;
-	JPanel panel;
-	JLabel label1, label2;
-	JTextField text1, text2;
+	JPanel loginPanel;
+	JLabel usernameLabel, passwordLabel;
+	JTextField usernameTextField, passwordTextField;
 	User user;
 	
-	LoginPage() {
+	public LoginPage() {
 	   setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	   
-	   label1 = new JLabel();
-	   label1.setText("Username:");
-	   text1 = new JTextField(15);
+	   usernameLabel = new JLabel();
+	   usernameLabel.setText("Username:");
+	   usernameTextField = new JTextField(15);
 	 
-	   label2 = new JLabel();
-	   label2.setText("Password:");
-	   text2 = new JPasswordField(15);
+	   passwordLabel = new JLabel();
+	   passwordLabel.setText("Password:");
+	   passwordTextField = new JPasswordField(15);
 	  
-	   SUBMIT=new JButton("SUBMIT");
+	   SUBMIT = new JButton("SUBMIT");
 	   SUBMIT.setMnemonic(KeyEvent.VK_ENTER);
 	   
-	   REGISTER=new JButton("REGISTER");
+	   REGISTER = new JButton("REGISTER");
 	   
-	   panel = new JPanel(new GridLayout(3,1));
-	   panel.add(label1);
-	   panel.add(text1);
-	   panel.add(label2);
-	   panel.add(text2);
-	   panel.add(REGISTER);
-	   panel.add(SUBMIT);
-	   add(panel,BorderLayout.CENTER);
+	   loginPanel = new JPanel(new GridLayout(3,1));
+	   loginPanel.add(usernameLabel);
+	   loginPanel.add(usernameTextField);
+	   loginPanel.add(passwordLabel);
+	   loginPanel.add(passwordTextField);
+	   loginPanel.add(REGISTER);
+	   loginPanel.add(SUBMIT);
+	   add(loginPanel, BorderLayout.CENTER);
 	   SUBMIT.addActionListener(this);
 	   
 	   REGISTER.addActionListener(new ActionListener() {
-		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			RegisterPage registerPage = new RegisterPage();
@@ -55,15 +54,11 @@ public class LoginPage extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		String username=text1.getText();
-		String password=text2.getText();
+		String username = usernameTextField.getText();
+		String password = passwordTextField.getText();
 		
 		try {
-			try {
-				user = Database.loginInDatabase(username, password);
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+			user = Database.loginInDatabase(username, password);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}

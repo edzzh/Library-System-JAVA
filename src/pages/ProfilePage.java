@@ -13,12 +13,12 @@ public class ProfilePage {
 	private static JButton returnBookButton = new JButton("Return Book");
 	private User user;
 	
-	ProfilePage(User user) {
+	public ProfilePage(User user) {
 		this.user = user;
 	}
 	
 	public JComponent renderProfilePage () throws SQLException {
-		JLabel label = new JLabel(user.getName().toUpperCase() + " Taken Books");
+		JLabel infoLabel = new JLabel(user.getName().toUpperCase() + " Taken Books");
 		
 		returnBookButton.setSize(40, 40);      
 		returnBookButton.addActionListener((e) -> {
@@ -28,7 +28,7 @@ public class ProfilePage {
 		jBooksTable = userBookListTable(user.getUserCode());
 		jTakenBookScrollPane.getViewport().add(jBooksTable);
 		
-		jPanel.add(label);
+		jPanel.add(infoLabel);
 		jPanel.add(jTakenBookScrollPane);
 		jPanel.add(returnBookButton);
 		

@@ -5,12 +5,12 @@ import java.util.Random;
 import utils.Utils;
 
 public class User {
-	Random r = new Random();
-	String username;
-	String password;
-	String name;
-	String surname;
-	int userCode;
+	private Random r = new Random();
+	private String username;
+	private String password;
+	private String name;
+	private String surname;
+	private int userCode;
 	
 	public User(String name, String surname, String username, int userCode) {
 		this.name = name;
