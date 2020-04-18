@@ -1,13 +1,14 @@
 package models;
 
 import java.sql.*;
-import java.util.*;
 import models.User;
+import pages.AddBookPage;
 import utils.Utils;
 
 public class Database {
 	final private static String userDatabase = "jdbc:sqlite:library_users.db";
     final private static String bookDatabase = "jdbc:sqlite:library_books.db";
+    final private static String takenBookDatabase = "jdbc:sqlite:taken_books.db";
     public static Connection con = null;
 
     public static void connect() {
@@ -66,20 +67,35 @@ public class Database {
         }
     }
     
-    public static void registerUserInDatabase(String name, String surname, String username, String password) throws SQLException {
+    public static void createTakenBooksTable() {
+    	String sql = "CREATE TABLE IF NOT EXISTS TAKEN_BOOKS (\n"
+                + "ID integer PRIMARY KEY, \n"
+                + "ISBN text NOT NULL, \n" 
+                + "USER_NUMBER integer NOT NULL, \n"
+                + "TAKEN boolean NOT NULL" + ")";
+        
+        try (Connection con = DriverManager.getConnection(takenBookDatabase)){
+            Statement stmt = con.createStatement();
+            stmt.execute(sql);
+            System.out.println("CREATED TAKEN BOOKS TABLE");
+        } catch (SQLException e) {
+           System.out.println(e.getMessage()); 
+        }
+    }
+    
+    public static void registerUserInDatabase(String name, String surname, String username, String password, int userCode) throws SQLException {
         String sql = "INSERT INTO USERS(NAME, SURNAME, USERNAME, PASSWORD, USER_NUMBER) "
                 + "VALUES (?, ?, ?, ?, ?)";
         
         con = DriverManager.getConnection(userDatabase);
         
         PreparedStatement ps = con.prepareStatement(sql);
-        Random r = new Random();
         
         ps.setString(1, name);
         ps.setString(2, surname);
         ps.setString(3, username);
-        ps.setString(4, Utils.MD5(password));
-        ps.setInt(5, r.nextInt((1000 - 1) + 1) + 1);
+        ps.setString(4, password);
+        ps.setInt(5, userCode);
         
         ps.executeUpdate();
     }
@@ -102,7 +118,7 @@ public class Database {
 			String outputName = result.getString("NAME");
 			String outputSurname = result.getString("SURNAME");
 			String outputUsername = result.getString("USERNAME");
-			String outputUserNumber = result.getString("USER_NUMBER");
+			int outputUserNumber = result.getInt("USER_NUMBER");
 			
 			user = new User(outputName, outputSurname, outputUsername, outputUserNumber);
 		}
@@ -117,7 +133,8 @@ public class Database {
     		String title, 
     		int rating, 
     		String condition, 
-    		String rarity
+    		String rarity,
+    		AddBookPage addBookPage
     ) throws SQLException {
     	String sql = "INSERT INTO BOOKS(ISBN, YEAR, AUTHOR, TITLE, RATING, CONDITION, RARITY) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -134,6 +151,26 @@ public class Database {
         ps.setString(7, rarity);
         
         ps.executeUpdate();
+        
+        addBookPage.dispose();
+    }
+    
+    private static String getBookAvailablity(String ISBN) throws SQLException {
+    	String query = "SELECT * FROM TAKEN_BOOKS ORDER BY ID ASC";
+    	con = DriverManager.getConnection(takenBookDatabase);
+    	Statement stmt = con.createStatement();
+    	ResultSet rsBooks = stmt.executeQuery(query);
+    	String taken = "Available";
+    	
+    	while(rsBooks.next()) {
+    		if (rsBooks.getString("ISBN").equals(ISBN)) {
+    			if (rsBooks.getBoolean("TAKEN")) {
+            		taken = "Not Available";
+            	}
+    		}
+    	}
+    	
+    	return taken;
     }
     
     public static String[][] getBooks() throws SQLException {
@@ -155,7 +192,7 @@ public class Database {
     	ResultSet rsBooks = stmt.executeQuery(query);
   	
         if (bookRowCount != 0) {
-        	Content = new String[bookRowCount][7];
+        	Content = new String[bookRowCount][8];
         	
         	while (rsBooks.next()) {
         		Content[rowNum][0] = "" + rsBooks.getString("ISBN");
@@ -165,10 +202,11 @@ public class Database {
         		Content[rowNum][4] = "" + rsBooks.getInt("Rating");
         		Content[rowNum][5] = "" + rsBooks.getString("Condition");
         		Content[rowNum][6] = "" + rsBooks.getString("Rarity");
+        		Content[rowNum][7] = "" + getBookAvailablity(rsBooks.getString("ISBN"));
         		rowNum++;
         	}
         } else {
-        	Content = new String[0][7];
+        	Content = new String[0][8];
         }
         
         return Content;
@@ -176,15 +214,87 @@ public class Database {
     
     public static void deleteBook(String isbn) throws SQLException {
     	String sql = "DELETE FROM BOOKS WHERE ISBN = ?";
+    	con = DriverManager.getConnection(bookDatabase);
+    	
     	PreparedStatement pstmt = con.prepareStatement(sql);
     	
     	pstmt.setString(1, isbn);
     	pstmt.executeUpdate();
     }
     
+    public static void saveTakenBook(String isbn, int userCode, boolean taken) throws SQLException {
+    	String sql = "INSERT INTO TAKEN_BOOKS(ISBN, USER_NUMBER, TAKEN) VALUES (?, ?, ?)";
+    	
+    	con = DriverManager.getConnection(takenBookDatabase);
+        PreparedStatement ps = con.prepareStatement(sql);
+        
+        ps.setString(1, isbn);
+        ps.setInt(2, userCode);
+        ps.setBoolean(3, taken);
+        
+        ps.executeUpdate();
+    }
+    
+    public static String[][] getTakenBooks(int userCode) throws SQLException {
+    	String takenBookQuery = "SELECT * FROM TAKEN_BOOKS ORDER BY ID ASC";
+    	String [][] BookContent = getBooks();
+    	String [][] Content;
+    	int bookRowNumber = 0;
+    	int rowNumber = 0;
+    
+    	Connection takenBookCon = DriverManager.getConnection(takenBookDatabase);
+    	
+    	Statement takenBookStmt = takenBookCon.createStatement();
+    	
+    	// Get Row Count By Using TYPE_FORWARD_ONLY as ResultSet Type
+    	ResultSet rsBookRowCount = takenBookStmt.executeQuery("SELECT COUNT(*) AS rowcount FROM TAKEN_BOOKS");
+    	rsBookRowCount.next();
+    	bookRowNumber = rsBookRowCount.getInt("rowcount");
+    	rsBookRowCount.close();
+    	
+    	// Get TAKEN BOOKS information from database
+    	ResultSet rsTakenBooks = takenBookStmt.executeQuery(takenBookQuery);
+    	
+    	if (BookContent.length != 0) {
+    		Content = new String[bookRowNumber][4];
+    		
+    		while(rsTakenBooks.next()) {
+    			String isbn = rsTakenBooks.getString("ISBN");
+    			int takenBookUserCode = rsTakenBooks.getInt("USER_NUMBER");
+    			
+    			if (takenBookUserCode == userCode) {
+    				for (int row = 0; row < BookContent.length; row++) {
+        	   			if (BookContent[row][0].equals(isbn)) {
+        	   				Content[rowNumber][0] = "" + BookContent[row][0];
+        	   				Content[rowNumber][1] = "" + BookContent[row][1];
+        	   				Content[rowNumber][2] = "" + BookContent[row][2];
+        	   				Content[rowNumber][3] = "" + BookContent[row][3];
+        	   				rowNumber++;
+        	   			}
+        			}
+    			}
+    		}
+    	} else {
+    		Content = new String[0][4];
+    	}
+    	
+    	return Content;
+    }
+    
+    public static void removeBookFromTakenBooks(String ISBN) throws SQLException {
+    	String sql = "DELETE FROM TAKEN_BOOKS WHERE ISBN = ?";
+    	con = DriverManager.getConnection(takenBookDatabase);
+    	
+    	PreparedStatement pstmt = con.prepareStatement(sql);
+    	pstmt.setString(1, ISBN);
+    	
+    	pstmt.executeUpdate();
+    }
+    
     // Use for DB creation on your local computer
     public static void main(String[] args) {
 //    	connect();
+//    	createTakenBooksTable();
 //    	createBooksTable();
 //    	createUsersTable();
     }

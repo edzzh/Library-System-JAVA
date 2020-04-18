@@ -8,16 +8,16 @@ import models.*;
 
 @SuppressWarnings("serial")
 public class LibraryPage {
-	private static JScrollPane jScrollPane = new JScrollPane();
+	private static JScrollPane jBookScrollPane = new JScrollPane();
 	private static JPanel jPanel = new JPanel();
 	private static JTable jBooksTable;
 	
     private JButton addBookButton = new JButton("Add Book");
     private JButton deleteBookButton = new JButton("Delete Book");
-	
+    private JButton addBookToUserListButton = new JButton("Add To Book List");
+    	
 	public JComponent renderLibraryPanel (User user) throws SQLException {
-		jBooksTable = createTable();
-		jScrollPane.getViewport().add(jBooksTable);
+		JLabel welcomeLabel = new JLabel("Hello, " + user.getName().toUpperCase() + "!");
 		
 		addBookButton.setSize(40, 40);
 		addBookButton.addActionListener((e) -> {
@@ -27,19 +27,31 @@ public class LibraryPage {
 		
 		deleteBookButton.setSize(40, 40);      
         deleteBookButton.addActionListener((e) -> {
-        	deleteBook();
+        	deleteBook(user);
         });
         
-        jPanel.add(new JLabel("Hello, " + user.getName().toUpperCase() + "!"));
-        jPanel.add(jScrollPane);
+        addBookToUserListButton.setSize(40, 40);
+        addBookToUserListButton.addActionListener((e) -> {
+        	addBookToUserBookList(user);
+        });
+        
+        jPanel.add(welcomeLabel);
+        
+        jBooksTable = createTable();
+        jBookScrollPane.getViewport().add(jBooksTable);
+        jPanel.add(jBookScrollPane);
+        
         jPanel.add(addBookButton);
+        
         jPanel.add(deleteBookButton);
+        
+        jPanel.add(addBookToUserListButton);
         
         return jPanel;
 	}
 	
 	public static JTable createTable() throws SQLException {
-		String ColumnHeaderName[] = { "ISBN", "Year", "Author", "Title", "Rating", "Condition", "Rarity" };
+		String ColumnHeaderName[] = { "ISBN", "Year", "Author", "Title", "Rating", "Condition", "Rarity", "Availability" };
 		
 		String[][] books = Database.getBooks();
 		
@@ -49,13 +61,13 @@ public class LibraryPage {
     		}
     	};
     	
-    	newTable.setPreferredScrollableViewportSize(new Dimension(900, 300));
+    	newTable.setPreferredScrollableViewportSize(new Dimension(900, 200));
     	newTable.setFillsViewportHeight(true);
         
         return newTable;
 	}
 	
-	private void deleteBook() {
+	private void deleteBook(User user) {
 		try {
 			if (jBooksTable.getValueAt(jBooksTable.getSelectedRow(), jBooksTable.getSelectedColumn()) != null) {
 				String ObjButtons[] = {"YES", "NO"};
@@ -76,6 +88,7 @@ public class LibraryPage {
 					try {
 						Database.deleteBook(ISBN);
 						reloadLibraryBookTable();
+						ProfilePage.reloadTakenBookTable(user.getUserCode());
 					} catch(Exception e) {
 						JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					}
@@ -98,10 +111,41 @@ public class LibraryPage {
 		}
 	}
 	
+	private void addBookToUserBookList(User user) {
+		try {
+			if (jBooksTable.getValueAt(jBooksTable.getSelectedRow(), jBooksTable.getSelectedColumn()) != null) {
+				String ISBN = jBooksTable.getValueAt(jBooksTable.getSelectedRow(),0).toString();
+				String bookTitle = jBooksTable.getValueAt(jBooksTable.getSelectedRow(),3).toString();
+				
+				try {
+					Database.saveTakenBook(ISBN, user.getUserCode(), true);
+					reloadLibraryBookTable();
+					ProfilePage.reloadTakenBookTable(user.getUserCode());
+				} catch(Exception e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				JOptionPane.showMessageDialog(
+						null,
+						"Book - " + bookTitle + " has been successfully added to Book List",
+						"Book Added",
+						JOptionPane.INFORMATION_MESSAGE
+				);
+			}
+		} catch(Exception e) {
+			JOptionPane.showMessageDialog(
+					null,
+					"Please select a book in the list to add to Book List.",
+					"No Book Selected",
+					JOptionPane.INFORMATION_MESSAGE
+			);
+		}
+	}
+	
 	public static void reloadLibraryBookTable() throws SQLException {
-		jScrollPane.getViewport().remove(jBooksTable);
+		jBookScrollPane.getViewport().remove(jBooksTable);
 		jBooksTable = createTable();
-		jScrollPane.getViewport().add(jBooksTable);
+		jBookScrollPane.getViewport().add(jBooksTable);
 		jPanel.repaint();
     }
 }

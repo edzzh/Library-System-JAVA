@@ -1,11 +1,11 @@
 package pages;
 
 import java.awt.event.*;
-import java.sql.SQLException;
 import java.awt.*;
 import javax.swing.*;
 
 import models.Database;
+import models.Book;
 
 @SuppressWarnings("serial")
 public class AddBookPage extends JFrame implements ActionListener{
@@ -94,22 +94,32 @@ public class AddBookPage extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
-			Database.saveBookInDatabase(
+			Book newBook = new Book(
 					isbnNumber.getText(), 
 					Integer.parseInt(year.getText()), 
-					author.getText(), 
-					title.getText(), 
-					Integer.parseInt(ratingComboBox.getSelectedItem().toString()), 
-					conditionComboBox.getSelectedItem().toString(), 
+					author.getText(),
+					title.getText(),
+					Integer.parseInt(ratingComboBox.getSelectedItem().toString()),
+					conditionComboBox.getSelectedItem().toString(),
 					rarityComboBox.getSelectedItem().toString()
 			);
 			
+			Database.saveBookInDatabase(
+					newBook.getISBN(), 
+					newBook.getYear(), 
+					newBook.getAuthor(), 
+					newBook.getTitle(), 
+					newBook.getRating(), 
+					newBook.getCondition(), 
+					newBook.getRarity(),
+					this
+			);
+			
 			LibraryPage.reloadLibraryBookTable();
-		} catch (NumberFormatException | SQLException e1) {
-			e1.printStackTrace();
+		} catch (Exception e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage(), 
+					"Error", JOptionPane.ERROR_MESSAGE);
 		}
-		
-		this.dispose();
 	}
 
 }

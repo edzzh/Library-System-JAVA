@@ -2,14 +2,14 @@ package pages;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 
 import javax.swing.*;
 
 import models.Database;
+import models.User;
 
+@SuppressWarnings("serial")
 public class RegisterPage extends JFrame implements ActionListener{
-    private static final long serialVersionUID = -6185538457897734306L;
     JButton register;
     JLabel nameLabel, surnameLabel, usernameLabel, passwordLabel;
     JTextField name, surname, username;
@@ -68,17 +68,25 @@ public class RegisterPage extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
-			Database.registerUserInDatabase(
-					name.getText(), 
-					surname.getText(), 
-					username.getText(), 
-					password.getText()
+			User user = new User(
+				name.getText(), 
+				surname.getText(), 
+				username.getText(),
+				password.getText()
 			);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			JOptionPane.showMessageDialog(null, e1.getMessage());
+			
+			Database.registerUserInDatabase(
+					user.getName(), 
+					user.getSurname(), 
+					user.getUsername(), 
+					user.getPassword(),
+					user.getUserCode()
+			);
+			
+			this.dispose();
+		} catch (Exception e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage(), 
+					"Error", JOptionPane.ERROR_MESSAGE);
 		}
-		
-		this.dispose();
 	}
 }

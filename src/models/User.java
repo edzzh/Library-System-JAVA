@@ -1,18 +1,30 @@
 package models;
 
+import java.util.Random;
+
+import utils.Utils;
+
 public class User {
+	Random r = new Random();
 	String username;
 	String password;
 	String name;
 	String surname;
-	String position;
-	String userCode;
+	int userCode;
 	
-	User(String name, String surname, String username, String userCode) {
+	public User(String name, String surname, String username, int userCode) {
 		this.name = name;
 		this.surname = surname;
 		this.username = username;
 		this.userCode = userCode;
+	}
+	
+	public User(String name, String surname, String username, String password) {
+		this.setName(name);
+		this.setSurname(surname);
+		this.setUsername(username);
+		this.setPassword(password);
+		this.setUserCode();
 	}
 
 	public String getUsername() {
@@ -20,7 +32,11 @@ public class User {
 	}
 
 	public void setUsername(String username) {
-		this.username = username;
+		if (username != null && !username.isEmpty()) {
+			this.username = username;
+		} else {
+			throw new IllegalArgumentException("Username Is Not Valid");
+		}
 	}
 
 	public String getPassword() {
@@ -28,7 +44,11 @@ public class User {
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
+		if (password != null && !password.isEmpty() && password.length() >= 7) {
+			this.password = Utils.MD5(password);
+		} else {
+			throw new IllegalArgumentException("Password Is Not Valid");
+		}
 	}
 
 	public String getName() {
@@ -36,15 +56,11 @@ public class User {
 	}
 
 	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getPosition() {
-		return position;
-	}
-
-	public void setPosition(String position) {
-		this.position = position;
+		if (name != null && !name.isEmpty()) {
+			this.name = name;
+		} else {
+			throw new IllegalArgumentException("Name Is Not Valid");
+		}
 	}
 
 	public String getSurname() {
@@ -52,14 +68,18 @@ public class User {
 	}
 
 	public void setSurname(String surname) {
-		this.surname = surname;
+		if (surname != null && !surname.isEmpty()) {
+			this.surname = surname;
+		} else {
+			throw new IllegalArgumentException("Surname Is Not Valid");
+		}
 	}
 
-	public String getUserCode() {
+	public int getUserCode() {
 		return userCode;
 	}
 
-	public void setUserCode(String userCode) {
-		this.userCode = userCode;
+	public void setUserCode() {
+		this.userCode = r.nextInt((1000 - 1) + 1) + 1;
 	}
 }

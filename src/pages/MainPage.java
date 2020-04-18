@@ -7,15 +7,14 @@ import models.*;
 import java.awt.event.*;
 import java.sql.SQLException;
 
-@SuppressWarnings("serial")
-public class MainPage extends JPanel {	
+public class MainPage {
+	private JFrame frame = new JFrame("Library UI");
+	private JTabbedPane tabbedPane = new JTabbedPane();
+	
 	MainPage(User user) throws SQLException {
-		super(new GridLayout(1,1));
-		JFrame frame = new JFrame("Library UI");
+		frame.setLayout(new GridLayout(1,1));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		JTabbedPane tabbedPane = new JTabbedPane();
-		
+			
 		JComponent libaryPanel = new LibraryPage().renderLibraryPanel(user);
 		tabbedPane.addTab("Library", null, libaryPanel, "Library");
 		tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
@@ -24,11 +23,13 @@ public class MainPage extends JPanel {
 		tabbedPane.addTab("Profile", null, profilePanel, "Profile");
 		tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
 		
-		frame.add(this);
-		frame.pack();
+		JComponent informationPanel = new InformationPage().renderInformationPage();
+		tabbedPane.addTab("Information", null, informationPanel, "Information");
+		tabbedPane.setMnemonicAt(2, KeyEvent.VK_3);
+		
+		frame.add(tabbedPane);
+		frame.setResizable(false);
 		frame.setSize(950, 500);
 		frame.setVisible(true);
-		
-		add(tabbedPane);
 	}
 }
