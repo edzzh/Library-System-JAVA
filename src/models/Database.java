@@ -296,9 +296,9 @@ public class Database {
     
     // Use for DB creation on your local computer
     public static void main(String[] args) {
-//    	connect();
-//    	createTakenBooksTable();
+    	connect();
+    	createTakenBooksTable();
 //    	createBooksTable();
-//    	createUsersTable();
+    	createUsersTable();
     }
 }

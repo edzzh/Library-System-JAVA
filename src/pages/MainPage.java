@@ -31,21 +31,5 @@ public class MainPage {
 		frame.setResizable(false);
 		frame.setSize(950, 500);
 		frame.setVisible(true);
-		
-		frame.addWindowListener(new java.awt.event.WindowAdapter() {
-		    @Override
-		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-		        if (JOptionPane.showConfirmDialog(frame, 
-		            "Are you sure you want to close this window?", "Close Window?", 
-		            JOptionPane.YES_NO_OPTION,
-		            JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
-		        	LoginPage login = new LoginPage();
-		        	login.setSize(400,100);
-		        	login.setVisible(true);
-		        	
-		            frame.dispose();
-		        }
-		    }
-		});
 	}
 }

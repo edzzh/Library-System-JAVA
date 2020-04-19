@@ -56,9 +56,18 @@ public class ProfilePage {
 		try {
 			if (jBooksTable.getValueAt(jBooksTable.getSelectedRow(), jBooksTable.getSelectedColumn()) != null) {
 				String ISBN = jBooksTable.getValueAt(jBooksTable.getSelectedRow(),0).toString();
+				String bookTitle = jBooksTable.getValueAt(jBooksTable.getSelectedRow(),3).toString();
+				
 				Database.removeBookFromTakenBooks(ISBN);
 				reloadTakenBookTable(userCode);
 				LibraryPage.reloadLibraryBookTable();
+				
+				JOptionPane.showMessageDialog(
+						null,
+						"Book - '" + bookTitle + "' has been successfully returned to library system.",
+						"Book Returned",
+						JOptionPane.INFORMATION_MESSAGE
+				);
 			}
 		} catch(Exception e) {
 			JOptionPane.showMessageDialog(

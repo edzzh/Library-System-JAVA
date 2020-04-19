@@ -9,11 +9,11 @@ import java.sql.*;
 
 @SuppressWarnings("serial")
 public class LoginPage extends JFrame implements ActionListener {
-	JButton SUBMIT, REGISTER;
-	JPanel loginPanel;
-	JLabel usernameLabel, passwordLabel;
-	JTextField usernameTextField, passwordTextField;
-	User user;
+	private JButton SUBMIT, REGISTER;
+	private JPanel loginPanel;
+	private JLabel usernameLabel, passwordLabel;
+	private JTextField usernameTextField, passwordTextField;
+	public User user;
 	
 	public LoginPage() {
 	   setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -27,8 +27,6 @@ public class LoginPage extends JFrame implements ActionListener {
 	   passwordTextField = new JPasswordField(15);
 	  
 	   SUBMIT = new JButton("SUBMIT");
-	   SUBMIT.setMnemonic(KeyEvent.VK_ENTER);
-	   
 	   REGISTER = new JButton("REGISTER");
 	   
 	   loginPanel = new JPanel(new GridLayout(3,1));
@@ -38,9 +36,10 @@ public class LoginPage extends JFrame implements ActionListener {
 	   loginPanel.add(passwordTextField);
 	   loginPanel.add(REGISTER);
 	   loginPanel.add(SUBMIT);
-	   add(loginPanel, BorderLayout.CENTER);
-	   SUBMIT.addActionListener(this);
 	   
+	   add(loginPanel, BorderLayout.CENTER);
+	   
+	   SUBMIT.addActionListener(this);	   
 	   REGISTER.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -78,9 +77,9 @@ public class LoginPage extends JFrame implements ActionListener {
 	
 	public static void main(String[] args) {
 		try {
-		  LoginPage frame=new LoginPage();
-		  frame.setSize(400,100);
-		  frame.setVisible(true);
+		  LoginPage loginPage = new LoginPage();
+		  loginPage.setSize(400,100);
+		  loginPage.setVisible(true);
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}

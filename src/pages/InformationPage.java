@@ -5,30 +5,29 @@ import java.sql.SQLException;
 import javax.swing.*;
 
 public class InformationPage {
-	public static JPanel jPanel1 = new JPanel();
-    public static JPanel jPanel2 = new JPanel();
-    public static JPanel jPanel3 = new JPanel();
+	public static JPanel informationPanel = new JPanel();
+    public static JPanel workingHoursPanel = new JPanel();
+    public static JPanel employeePanel = new JPanel();
     
-    private static JTable jInfoTable = new JTable();
-    private static JTable jInfoTable2 = new JTable();
+    private static JTable timesheetTable = new JTable();
+    private static JTable employeeTable = new JTable();
     
-    public JComponent renderInformationPage () throws SQLException {
+    public JComponent renderInformationPage () throws SQLException {     
+    	informationPanel.setLayout(new BoxLayout(informationPanel, BoxLayout.Y_AXIS));
         
-        jPanel1.setLayout(new BoxLayout(jPanel1, BoxLayout.Y_AXIS));
-        
-        jPanel2.add(new JLabel("Working hours: "));    
-        jPanel3.add(new JLabel("Employees and Specialization: "));    
+    	workingHoursPanel.add(new JLabel("Working hours: "));    
+    	employeePanel.add(new JLabel("Employees and Specialization: "));    
 
-        jInfoTable = createTimesheetTable(); 
-        jInfoTable2 = createEmployeeTabel();
+    	timesheetTable = createTimesheetTable(); 
+    	employeeTable = createEmployeeTabel();
         
-        jPanel2.add(new JScrollPane(jInfoTable));
-        jPanel3.add(new JScrollPane(jInfoTable2));
+        workingHoursPanel.add(new JScrollPane(timesheetTable));
+        employeePanel.add(new JScrollPane(employeeTable));
         
-        jPanel1.add(jPanel2);
-        jPanel1.add(jPanel3);
+        informationPanel.add(workingHoursPanel);
+        informationPanel.add(employeePanel);
         
-        return jPanel1;
+        return informationPanel;
         
     }
     

@@ -114,23 +114,32 @@ public class LibraryPage {
 	private void addBookToUserBookList(User user) {
 		try {
 			if (jBooksTable.getValueAt(jBooksTable.getSelectedRow(), jBooksTable.getSelectedColumn()) != null) {
-				String ISBN = jBooksTable.getValueAt(jBooksTable.getSelectedRow(),0).toString();
-				String bookTitle = jBooksTable.getValueAt(jBooksTable.getSelectedRow(),3).toString();
-				
-				try {
-					Database.saveTakenBook(ISBN, user.getUserCode(), true);
-					reloadLibraryBookTable();
-					ProfilePage.reloadTakenBookTable(user.getUserCode());
-				} catch(Exception e) {
-					JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				if(!jBooksTable.getValueAt(jBooksTable.getSelectedRow(), 7).toString().equals("Not Available")) {
+					String ISBN = jBooksTable.getValueAt(jBooksTable.getSelectedRow(),0).toString();
+					String bookTitle = jBooksTable.getValueAt(jBooksTable.getSelectedRow(),3).toString();
+					
+					try {
+						Database.saveTakenBook(ISBN, user.getUserCode(), true);
+						reloadLibraryBookTable();
+						ProfilePage.reloadTakenBookTable(user.getUserCode());
+					} catch(Exception e) {
+						JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					}
+					
+					JOptionPane.showMessageDialog(
+							null,
+							"Book - " + bookTitle + " has been successfully added to Book List",
+							"Book Added",
+							JOptionPane.INFORMATION_MESSAGE
+					);
+				} else {
+					JOptionPane.showMessageDialog(
+							null,
+							"You can't add this book, it's already taken by someone else.",
+							"Not Available Book",
+							JOptionPane.ERROR_MESSAGE
+					);
 				}
-				
-				JOptionPane.showMessageDialog(
-						null,
-						"Book - " + bookTitle + " has been successfully added to Book List",
-						"Book Added",
-						JOptionPane.INFORMATION_MESSAGE
-				);
 			}
 		} catch(Exception e) {
 			JOptionPane.showMessageDialog(
